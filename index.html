@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<!-- Head -->
+	<head>
+		<meta charset="utf-8" >
+		<title>Assignment 1</title>
+		<style>
+			body {
+				width: 800px;
+				margin: 0 auto;
+			}
+			
+			table, th, td {
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+			
+			td {
+				font-weight: bold;
+				text-align: center;
+			}
+			
+			input[type='button'] {
+				margin-left: 640px;
+				width: 150px;
+			}
+			
+			#oddTbl {
+				width: 380px;
+				float: left;
+			}
+			#evenTbl {
+				width: 380px;
+				float: right;
+			}
+			
+			#result {
+				display: block;
+			}
+			
+			#history {
+				width: 400px;
+				display: block;
+			}
+			
+			#historyTbl {
+				margin: 10px auto;
+			}
+			
+			#historyTbl th {
+				width: 200px;
+			}
+			
+			.clearBgColor{
+				background-color:white;
+			}
+			.clearFontColor {
+				color:black;
+			}
+			
+			.even {
+				background-color: aqua;
+			}
+			
+			.evenFont{
+				color: blue;
+
+			}
+			
+			.odd {
+				background-color: orange;
+			}
+			
+			.oddFont {
+				color: red;
+			}
+			
+			
+		</style>
+		
+		<script>
+			var evenCount = 0;
+			var oddCount = 0;
+			var userInput;
+			var interval;
+		
+			function Start()
+			{
+				interval = setInterval(function() { Calc(); }, 100); 
+			}
+
+			function Calc()
+			{
+				var num;
+				var sum;
+				var tr = document.createElement("TR");
+				var tbody = document.getElementById("historyTbody");
+				
+				userInput = window.prompt("Input an interger number except 0. \nIf you would like to finish, click 'Cancel' please.", "");
+				if(userInput == null)
+				{
+					clearInterval(interval);
+					alert("Bye");
+					return;
+				}
+				
+				if(IsValidNumber(userInput))
+				{
+					num = parseInt(userInput);
+				}else
+				{
+					return;
+				}
+
+				if(num % 2 == 0)
+				{
+					evenCount++;
+					sum = parseInt(document.getElementById("evenSum").innerText) + num;
+					document.getElementById("evenSum").innerText = sum;
+					document.getElementById("evenAvg").innerText = (sum / evenCount).toFixed(3);
+					tr.innerHTML = "<td>&nbsp;</td><td class='evenFont'>" + num + "</td>";
+					setColor("even", "evenFont", "clearBgColor", "clearFontColor");
+				} else 
+				{
+					oddCount++;
+					sum = parseInt(document.getElementById("oddSum").innerText) + num;
+					document.getElementById("oddSum").innerText = sum;
+					document.getElementById("oddAvg").innerText = (sum / oddCount).toFixed(3);
+					tr.innerHTML = "<td class='oddFont'>" + num + "</td><td>&nbsp;</td>";
+					setColor("clearBgColor", "clearFontColor", "odd", "oddFont");
+				}
+				
+				if(tbody.firstElementChild == null){
+					tbody.appendChild(tr);
+				}else{
+					tbody.insertBefore(tr, tbody.firstElementChild);
+				}
+			
+			}
+
+			
+			function IsValidNumber(num)
+			{
+				var target = num;
+				
+				if(target.trim() == "" || isNaN(target))
+				{
+					alert("You must input a number. Try it again!");
+					return false;
+				}
+				
+				target = parseInt(target)
+				
+				// Integer check
+				if(target != parseFloat(num))
+				{
+					alert("You must input an interger number. Try it again!");
+					return false;
+				}
+				
+				if(target == 0)
+				{
+					alert("0 is not allowed");
+					return false;
+				}
+				
+				return true;
+			}			
+
+			
+			function setColor(evenClass, evenFont, oddClass, oddFont){
+				setClass(document.getElementsByName("even"), evenClass);
+				setClass(document.getElementsByName("evenFont"), evenFont);
+				
+				setClass(document.getElementsByName("odd"), oddClass);
+				setClass(document.getElementsByName("oddFont"), oddFont);
+			}
+			
+			
+			function setClass(elements, className){
+				for(var i=0; i<elements.length;i++){
+					elements[i].className = className;
+				}
+			}
+			
+		</script>
+	
+	</head>
+	
+	<!-- Body -->
+	<body >
+	
+		<head>
+			<h1>Assignment 1</h1>
+			<hr>
+			<h2>Instruction</h2>
+			<ol>
+				<li>When you click the "Start" button, it will show you the window to enter an integer number.</li>
+				<li>You can enter an integer number as many numbers as you want.</li>
+				<li>You can see the result of the sum and the average of odd or even input numbers that you entered.</li>
+				<li>If you want to stop entering a number, click "cancel" button.</li>
+			</ol>
+		</head>
+		
+		<main>
+				<p>
+					<input type="button" name="button" value="Start" onclick="Start();" >
+				</p>
+			<br>
+			
+			<fieldset id="result">
+				<legend>Result</legend>
+				
+				<table id="oddTbl">
+					<tr>
+						<th colspan="2" name="odd">ODD</th>
+					</tr>
+					<tr>
+						<th name="odd">SUM</th>
+						<th name="odd">AVG</th>
+					</tr>
+					<tr>
+						<td id="oddSum" name="oddFont">0</td>
+						<td id="oddAvg" name="oddFont">0</td>
+					</tr>					
+				</table>
+				
+				
+				<table id="evenTbl">
+					<tr>
+						<th colspan="2" name="even">EVEN</th>
+					</tr>
+					<tr>
+						<th name="even">SUM</th>
+						<th name="even">AVG</th>
+					</tr>
+					<tr>
+						<td id="evenSum" name="evenFont">0</td>
+						<td id="evenAvg" name="evenFont">0</td>
+					</tr>					
+				</table>
+			</fieldset>
+			<br>
+			
+			<fieldset>
+				<legend>History that you entered</legend>
+				<table id="historyTbl">
+
+					<thead>
+					<tr>
+						<th name="odd">ODD</th>
+						<th name="even">EVEN</th>
+					</tr>
+					</thead>
+					<tbody id="historyTbody">
+					</tbody>
+				</table>
+			</fieldset>
+		
+		</main>
+	</body>
+
+</html>
